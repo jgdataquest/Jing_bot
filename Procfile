@@ -1,1 +1,1 @@
-worker: python jing_bot.py
+worker: python PlotBot.py
