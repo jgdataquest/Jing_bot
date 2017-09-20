@@ -4,7 +4,7 @@ import random
 import re
 import tweepy
 import json
-import pandas
+import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
