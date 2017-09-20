@@ -5,6 +5,7 @@ import re
 import tweepy
 import json
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import re
