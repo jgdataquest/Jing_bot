@@ -4,6 +4,7 @@ import random
 import re
 import tweepy
 import json
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 import re
