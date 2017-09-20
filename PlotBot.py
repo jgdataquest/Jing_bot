@@ -7,10 +7,11 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+import os
 import re
 import string
 import datetime
+import seaborn as sns
 sns.axes_style('darkgrid')
 sns.set_style('darkgrid')
 # Import and Initialize Sentiment Analyzer
@@ -69,15 +70,24 @@ def analyze_user(target_user, request_user):
     plt.ylim([-1.0, 1.0])
 
     # Save the figure
-    plt.savefig("tweetout_" + target_user +".png")
-    api.update_with_media(("tweetout_" + target_user +".png"), \
-                           "Sentiment Analysis of Tweets for " +  user + \
-                           " (" + dt + ") (Thx @" + request_user + "!!!)")
+    script_dir = os.path.dirname(__file__)
+    results_dir = os.path.join(script_dir, 'analysis/')
+    sample_file_name = "tweetout_" + target_user +".png"
+    
+    if not os.path.isdir(results_dir):
+        os.makedirs(results_dir)
+
+    plt.savefig(results_dir + sample_file_name)
+    #plt.savefig('analysis/"tweetout_" + target_user +".png"')
+    api.update_with_media((results_dir+sample_file_name), \
+                            "Sentiment Analysis of Tweets for " +  user + \
+                            " (" + dt + ") (Thx @" + request_user + "!!!)")
+
+    # api.update_with_media(('analysis/"tweetout_" + target_user +".png"'), \
+    #                        "Sentiment Analysis of Tweets for " +  user + \
+    #                        " (" + dt + ") (Thx @" + request_user + "!!!)")
     # Show plot
-    #plt.show()              
-
-
-
+    #plt.show()
 
 while(True):
     #Setup Tweepy API Authentication
@@ -85,22 +95,29 @@ while(True):
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
     # Target Search Term
-    target_terms = ("@jingpc please analyze:")
+    target_terms = ("@jingpc analyze:")
     # Variable for holding the oldest tweet
     received_tweets = api.search(target_terms, count=100, result_type="recent")
     for tweet in received_tweets["statuses"]:
         print(tweet["text"])
         if tweet["id_str"] not in tweet_list:
-            tweet_text=tweet["text"] 
+            tweet_list.append(tweet["id_str"]) 
+            tweet_text=tweet["text"]
             #print(tweet["text"])
             tweet_text1=re.split('@', tweet_text)
-            #print(tweet_text1[2])
-            target_user=tweet_text1[2]
+            print(tweet_text1)
+            try:
+                #print(tweet_text1[2])
+                target_user=tweet_text1[2]
+            except:                             
+                target_user="@nobody"
+                continue                       
             request_user=tweet["user"]["screen_name"]
             print(request_user)
-            print(target_user)             
-            analyze_user(target_user, request_user)           
-            tweet_list.append(tweet["id_str"])
+            print(target_user)
+            analyze_user(target_user, request_user)                       
+            
+            
     print(tweet_list)
     # Once tweeted, wait 180 seconds before doing anything else
     time.sleep(180) 
