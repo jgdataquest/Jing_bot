@@ -29,7 +29,7 @@ access_token_secret = "FbVtjlAUr7LQ6A9DOViaFzp0ISQdEoy1J7zvrEbTekESJ"
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
-tweet_list = []
+tweet_list = ['910537606701731840', '910528491363426304', '910528147615035392', '910527069603467265', '910525764545761280', '910270268702167041', '910269147573051393', '910230943839002631', '910223496776753152', '910220422158979075', '909600940675801088', '909584017544105987', '909573446316806144', '910565065971191808']
 
 
 def analyze_user(target_user, request_user):
